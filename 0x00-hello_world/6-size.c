@@ -2,7 +2,7 @@
 
 /**
 * main- Entry Point
-* Description: 'A Program that print the size of a file  for various computer program
+* Description: 'A Program that print the size of a file'
 * Return: Always 0 (Success)
 */
 
