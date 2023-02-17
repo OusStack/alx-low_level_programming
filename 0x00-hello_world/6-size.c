@@ -1,8 +1,8 @@
 #include<stdio.h>
 /**
-*main- A program that show us the size of the file type.
+* main- A program that prints  the size of various computer types
 *
-*Retrun: 0 (Success).
+* Return 0 (Success)
 */
 int main(void)
 {
