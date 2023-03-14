@@ -1,28 +1,52 @@
+#include "main.h"
 #include <stdlib.h>
-#include <string.h>
-
+#include <stdio.h>
+/**
+ * str_concat - concatenates 2 string
+ * a NULL string is treated as an empty string
+ * @s1: pointer to string
+ * @s2: pointer to string
+ *
+ * Return: pointer tto newly allocated memory which
+ * has s1, s2, and null byte
+ * NULL onfailure
+ */
 char *str_concat(char *s1, char *s2)
 {
-    // Treat NULL pointers as empty strings
-    if (s1 == NULL) s1 = "";
-    if (s2 == NULL) s2 = "";
+	unsigned int len1, len2, size, i, j;
+	char *nstr;
 
-    // Compute length of input strings
-    size_t len1 = strlen(s1);
-    size_t len2 = strlen(s2);
+	if (s1 == NULL)
+		s1 = "";
+	if (s2 == NULL)
+		s2 = "";
 
-    // Allocate memory for concatenated string
-    char *result = malloc(len1 + len2 + 1);
+	len1 = 0;
+	while (s1[len1] != '\0')
+		len1++;
+	len2 = 0;
+	while (s2[len2] != '\0')
+		len2++;
 
-    // Check if memory allocation was successful
-    if (result == NULL) {
-        return NULL;
-    }
+	size = len1 + len2;
 
-    // Copy input strings into result
-    strcpy(result, s1);
-    strcat(result, s2);
+	nstr = malloc((sizeof(char) * size) + 1);
+	/*check if malloc was successful */
+	if (nstr == NULL)
+		return (NULL);
 
-    return result;
+	i = 0;
+	while (i < len1)
+	{
+		nstr[i] = s1[i];
+		i++;
+	}
+	j = 0;
+	while (i <= size)
+	{
+		nstr[i] = s2[j];
+		i++;
+		j++;
+	}
+	return (nstr);
 }
-
