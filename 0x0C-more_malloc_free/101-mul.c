@@ -1,125 +1,134 @@
 #include "main.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 /**
- * _strlen - returns the length of a string
- * @s: string to evaluate
- * Return: the length of the string
- */
-int _strlen(char *s)
+ * _memset - fills memory with a constant byte
+ *
+ * @s: input pointer that represents memory block
+ *     to fill
+ * @b: characters to fill/set
+ * @n: number of bytes to be filled
+ *
+ * Return: pointer to the filled memory area
+*/
+
+char *_memset(char *s, char b, unsigned int n)
 {
-    int i = 0;
+	unsigned int i = 0;
 
-    while (s[i] != '\0')
-    {
-        i++;
-    }
-
-    return (i);
+	while (i < n)
+	{
+		s[i] = b;
+		i++;
+	}
+	return (s);
 }
 
 /**
- * errors - handles errors for main
- */
-void errors(void)
-{
-    int i;
-    char *err = "Error\n";
+ * _calloc - function that allocates memory
+ *           for an array using memset
+ *
+ * @nmemb: size of array
+ * @size: size of each element
+ *
+ * Return: pointer to new allocated memory
+*/
 
-    for (i = 0; err[i]; i++)
-    {
-        _putchar(err[i]);
-    }
-    exit(98);
+void *_calloc(unsigned int nmemb, unsigned int size)
+{
+	char *ptr;
+
+	if (nmemb == 0 || size == 0)
+		return (NULL);
+	ptr = malloc(nmemb * size);
+	if (ptr == NULL)
+		return (NULL);
+	_memset(ptr, 0, nmemb * size);
+
+	return (ptr);
 }
 
-/**
- * is_digit - checks if a string contains a non-digit char
- * @s: string to be evaluated
- * Return: 0 if a non-digit is found, 1 otherwise
- */
-int is_digit(char *s)
-{
-    int i = 0;
-
-    while (s[i])
-    {
-        if (s[i] < '0' || s[i] > '9')
-            return (0);
-        i++;
-    }
-
-    return (1);
-}
 
 /**
- * multiply - multiplies two numbers represented as strings
- * @s1: first string
- * @s2: second string
- */
+ * multiply - initialize array with 0 byte
+ *
+ * @s1: string 1
+ * @s2: string 2
+ *
+ * Return: nothing
+*/
+
 void multiply(char *s1, char *s2)
 {
-    int len1, len2, len, i, carry, digit1, digit2, *result, a = 0;
+	int i, l1, l2, total_l, f_digit, s_digit, res = 0, tmp;
+	char *ptr;
+	void *temp;
 
-    len1 = _strlen(s1);
-    len2 = _strlen(s2);
-    len = len1 + len2 + 1;
+	l1 = _length(s1);
+	l2 = _length(s2);
+	tmp = l2;
+	total_l = l1 + l2;
+	ptr = _calloc(sizeof(int), total_l);
 
-    result = malloc(sizeof(int) * len);
+	/* store our pointer address to free later */
+	temp = ptr;
 
-    if (!result)
-        exit(1);
+	for (l1--; l1 >= 0; l1--)
+	{
+		f_digit = s1[l1] - '0';
+		res = 0;
+		l2 = tmp;
+		for (l2--; l2 >= 0; l2--)
+		{
+			s_digit = s2[l2] - '0';
+			res += ptr[l2 + l1 + 1] + (f_digit * s_digit);
+			ptr[l1 + l2 + 1] = res % 10;
+			res /= 10;
+		}
+		if (res)
+			ptr[l1 + l2 + 1] = res % 10;
+	}
 
-    for (i = 0; i <= len1 + len2; i++)
-        result[i] = 0;
+	while (*ptr == 0)
+	{
+		ptr++;
+		total_l--;
+	}
 
-    for (len1 = len1 - 1; len1 >= 0; len1--)
-    {
-        digit1 = s1[len1] - '0';
-        carry = 0;
-
-        for (len2 = _strlen(s2) - 1; len2 >= 0; len2--)
-        {
-            digit2 = s2[len2] - '0';
-            carry += result[len1 + len2 + 1] + (digit1 * digit2);
-            result[len1 + len2 + 1] = carry % 10;
-            carry /= 10;
-        }
-
-        if (carry > 0)
-            result[len1 + len2 + 1] += carry;
-    }
-
-    for (i = 0; i < len - 1; i++)
-    {
-        if (result[i])
-            a = 1;
-
-        if (a)
-            _putchar(result[i] + '0');
-    }
-
-    if (!a)
-        _putchar('0');
-
-    _putchar('\n');
-
-    free(result);
+	for (i = 0; i < total_l; i++)
+		printf("%i", ptr[i]);
+	printf("\n");
+	free(temp);
 }
+
 
 /**
- * main - entry point for the program
+ * main - Entry point
+ *
+ * Description: a program that multiplies
+ *            two positive numbers
+ *
  * @argc: number of arguments
- * @argv: array of arguments
- * Return: 0 if success, 1 if error
- */
+ * @argv: arguments array
+ *
+ * Return: 0 on success 98 on faliure
+*/
+
 int main(int argc, char *argv[])
 {
-    if (argc != 3 || !is_digit(argv[1]) || !is_digit(argv[2]))
-        errors();
+	char *n1 = argv[1];
+	char *n2 = argv[2];
 
-    multiply(argv[1], argv[2]);
+	if (argc != 3 || check_number(n1) || check_number(n2))
+		error_exit();
 
-    return (0);
+	if (*n1 == '0' || *n2 == '0')
+	{
+		_putchar('0');
+		_putchar('\n');
+	}
+	else
+		multiply(n1, n2);
+	return (0);
 }
-
