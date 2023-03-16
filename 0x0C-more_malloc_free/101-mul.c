@@ -1,27 +1,5 @@
 #include "main.h"
 #include <stdlib.h>
-#include <stdio.h>
-
-#define ERR_MSG "Error"
-
-/**
- * is_digit - checks if a string contains a non-digit char
- * @s: string to be evaluated
- * Return: 0 if a non-digit is found, 1 otherwise
- */
-int is_digit(char *s)
-{
-    int i = 0;
-
-    while (s[i])
-    {
-        if (s[i] < '0' || s[i] > '9')
-            return (0);
-        i++;
-    }
-
-    return (1);
-}
 
 /**
  * _strlen - returns the length of a string
@@ -45,25 +23,43 @@ int _strlen(char *s)
  */
 void errors(void)
 {
-    printf("Error\n");
+    int i;
+    char *err = "Error\n";
+
+    for (i = 0; err[i]; i++)
+    {
+        _putchar(err[i]);
+    }
     exit(98);
 }
 
 /**
- * main - multiplies two positive numbers
- * @argc: number of arguments
- * @argv: array of arguments
- * Return: always 0 (Success)
+ * is_digit - checks if a string contains a non-digit char
+ * @s: string to be evaluated
+ * Return: 0 if a non-digit is found, 1 otherwise
  */
-int main(int argc, char *argv[])
+int is_digit(char *s)
 {
-    char *s1, *s2;
+    int i = 0;
+
+    while (s[i])
+    {
+        if (s[i] < '0' || s[i] > '9')
+            return (0);
+        i++;
+    }
+
+    return (1);
+}
+
+/**
+ * multiply - multiplies two numbers represented as strings
+ * @s1: first string
+ * @s2: second string
+ */
+void multiply(char *s1, char *s2)
+{
     int len1, len2, len, i, carry, digit1, digit2, *result, a = 0;
-
-    s1 = argv[1], s2 = argv[2];
-
-    if (argc != 3 || !is_digit(s1) || !is_digit(s2))
-        errors();
 
     len1 = _strlen(s1);
     len2 = _strlen(s2);
@@ -72,7 +68,7 @@ int main(int argc, char *argv[])
     result = malloc(sizeof(int) * len);
 
     if (!result)
-        return (1);
+        exit(1);
 
     for (i = 0; i <= len1 + len2; i++)
         result[i] = 0;
@@ -109,6 +105,21 @@ int main(int argc, char *argv[])
     _putchar('\n');
 
     free(result);
+}
+
+/**
+ * main - entry point for the program
+ * @argc: number of arguments
+ * @argv: array of arguments
+ * Return: 0 if success, 1 if error
+ */
+int main(int argc, char *argv[])
+{
+    if (argc != 3 || !is_digit(argv[1]) || !is_digit(argv[2]))
+        errors();
+
+    multiply(argv[1], argv[2]);
+
     return (0);
 }
 
