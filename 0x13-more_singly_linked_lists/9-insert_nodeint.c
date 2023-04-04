@@ -4,11 +4,10 @@
  * insert_nodeint_at_index - a function that inserts a new node at
  *                           a given position
  *
+ * Author: Oussama EL Attar
  * @head: pointer to the first node of the list
  * @idx: is the index of the list where the new node should be added
  * @n: element to add to the new node
- *
- * By Oussama El Attar @OusStack
  *
  * Return: NULL if anything fails or the address of the new node
 */
